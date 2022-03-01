@@ -33,6 +33,20 @@ set(COREMQTT_AGENT_SRCS
     ${COREMQTT_AGENT_PORT_SRCS}
 )
 
+# This gives SHADOW_SOURCES and SHADOW_INCLUDE_PUBLIC_DIRS
+include(${CMAKE_CURRENT_LIST_DIR}/libraries/Device-Shadow-for-AWS-IoT-embedded-sdk/Device-Shadow-for-AWS-IoT-embedded-sdk/shadowFilePaths.cmake)
+
+
+
+set(DEVICE_SHADOW_INCLUDE_DIRS
+    ${SHADOW_INCLUDE_PUBLIC_DIRS}
+    ${CMAKE_CURRENT_LIST_DIR}/libraries/Device-Shadow-for-AWS-IoT-embedded-sdk/config
+)
+
+set(SHADOW_REQUIRES
+)
+
+
 # Network transport port
 
 if(CONFIG_AWS_IOT_USE_NETWORK_TRANSPORT_PORT)
@@ -71,10 +85,12 @@ idf_component_register(
         ${COREMQTT_SRCS}
         ${COREMQTT_AGENT_SRCS}
         ${NETWORK_TRANSPORT_PORT_SRCS}
+        ${SHADOW_SOURCES}
     INCLUDE_DIRS
         ${COREMQTT_INCLUDE_DIRS}
         ${COREMQTT_AGENT_INCLUDE_DIRS}
         ${NETWORK_TRANSPORT_PORT_INCLUDE_DIRS}
+        ${DEVICE_SHADOW_INCLUDE_DIRS}
     REQUIRES
         ${NETWORK_TRANSPORT_PORT_REQUIRES}
 )
