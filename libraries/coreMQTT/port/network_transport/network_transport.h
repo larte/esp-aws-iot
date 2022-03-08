@@ -18,23 +18,24 @@ typedef enum TlsTransportStatus
 
 struct NetworkContext
 {
-    esp_tls_t* pxTls;
+    esp_tls_t *pxTls;
     const char *pcHostname;
     int xPort;
     const char *pcServerRootCAPem;
     const char *pcClientCertPem;
     const char *pcClientKeyPem;
+    bool skip_commonname;
     void *ds_data;
 };
 
-TlsTransportStatus_t xTlsConnect(NetworkContext_t* pxNetworkContext );
+TlsTransportStatus_t xTlsConnect(NetworkContext_t *pxNetworkContext);
 
-TlsTransportStatus_t xTlsDisconnect( NetworkContext_t* pxNetworkContext );
+TlsTransportStatus_t xTlsDisconnect(NetworkContext_t *pxNetworkContext);
 
-int32_t espTlsTransportSend( NetworkContext_t* pxNetworkContext,
-    const void* pvData, size_t uxDataLen );
+int32_t espTlsTransportSend(NetworkContext_t *pxNetworkContext,
+                            const void *pvData, size_t uxDataLen);
 
-int32_t espTlsTransportRecv( NetworkContext_t* pxNetworkContext,
-    void* pvData, size_t uxDataLen );
+int32_t espTlsTransportRecv(NetworkContext_t *pxNetworkContext,
+                            void *pvData, size_t uxDataLen);
 
 #endif /* ESP_TLS_TRANSPORT_H */

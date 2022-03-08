@@ -384,7 +384,8 @@ BaseType_t CRYPTO_SignatureVerificationFinal(void *pvContext,
         /*
          * Clean-up
          */
-        vPortFree(pxCtx);
+
+        // vPortFree(pxCtx);
     }
 
     return xResult;
