@@ -83,13 +83,17 @@ static const char codeSigningCertificatePEM[] = otapalconfigCODE_SIGNING_CERTIFI
 /* Specify the OTA signature algorithm we support on this platform. */
 const char OTA_JsonFileSignatureKey[OTA_FILE_SIG_KEY_STR_MAX_LENGTH] = "sig-sha256-ecdsa";
 
+#ifdef otaconfigLABEL_CERT
 static CK_RV prvGetCertificateHandle(CK_FUNCTION_LIST_PTR pxFunctionList,
                                      CK_SESSION_HANDLE xSession,
                                      const char *pcLabelName,
                                      CK_OBJECT_HANDLE_PTR pxCertHandle);
+
 static CK_RV prvGetCertificate(const char *pcLabelName,
                                uint8_t **ppucData,
                                uint32_t *pulDataSize);
+
+#endif
 
 static OtaPalMainStatus_t asn1_to_raw_ecdsa(uint8_t *signature,
                                             uint16_t sig_len,
@@ -230,6 +234,7 @@ OtaPalStatus_t otaPal_CreateFileForRx(OtaFileContext_t *const pFileContext)
     return OTA_PAL_COMBINE_ERR(OtaPalSuccess, 0);
 }
 
+#ifdef otaconfigLABEL_CERT
 static CK_RV prvGetCertificateHandle(CK_FUNCTION_LIST_PTR pxFunctionList,
                                      CK_SESSION_HANDLE xSession,
                                      const char *pcLabelName,
@@ -352,6 +357,7 @@ static CK_RV prvGetCertificate(const char *pcLabelName,
 
     return xResult;
 }
+#endif
 
 uint8_t *otaPal_ReadAndAssumeCertificate(const uint8_t *const pucCertName,
                                          uint32_t *const ulSignerCertSize)
@@ -359,9 +365,9 @@ uint8_t *otaPal_ReadAndAssumeCertificate(const uint8_t *const pucCertName,
     uint8_t *pucCertData;
     uint32_t ulCertSize;
     uint8_t *pucSignerCert = NULL;
-    CK_RV xResult;
 
 #ifdef otaconfigLABEL_CERT
+    CK_RV xResult;
     xResult = prvGetCertificate((const char *)pucCertName, &pucSignerCert, ulSignerCertSize);
 
     if ((xResult == CKR_OK) && (pucSignerCert != NULL))
